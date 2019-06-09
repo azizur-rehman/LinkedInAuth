@@ -36,7 +36,7 @@ Add it in your root build.gradle at the end of repositories:
             .setAppSecret("YOUR_APP_SECRET")
             .setRedirectURL("YOUR_REDIRECT_URL") 
             .setScope("LINKED_IN_PROVIDED_SCOPE") //optional
-            .setState("LINKEDIN_PROVIDED_STATE")
+            .setState("LINKEDIN_PROVIDED_STATE") //optional
             .build()
             
  2. Start activity
