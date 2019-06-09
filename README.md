@@ -31,7 +31,7 @@ Add it in your root build.gradle at the end of repositories:
   
   1. Create an intent builder
   
-   val intent = LinkedInIntent.Builder(this)
+        val intent = LinkedInIntent.Builder(this)
             .setAppKey("YOUR_KEY")
             .setAppSecret("YOUR_APP_SECRET")
             .setRedirectURL("YOUR_REDIRECT_URL") 
@@ -41,15 +41,15 @@ Add it in your root build.gradle at the end of repositories:
             
  2. Start activity
  
-    startActivityForResult(intent, RC_LINKEDIN)
+       startActivityForResult(intent, RC_LINKEDIN)
     
  3. Override onActivityResult()
  
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+       override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-      val userDetail = LinkedInIntent.UserDetail(data).data
+        val userDetail = LinkedInIntent.UserDetail(data).data
         Log.d("SampleActivity", "onActivityResult: $userDetail")
-
+	
         super.onActivityResult(requestCode, resultCode, data)
-    }
+       }
   
