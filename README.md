@@ -1,5 +1,6 @@
-# LinkedInAuth
-A Lightweight android library for outh2 based LinkedIn Sign In
+# LinkedInAuth [![](https://jitpack.io/v/azizur-rehman/LinkedInAuth.svg)](https://jitpack.io/#azizur-rehman/LinkedInAuth)
+
+A Lightweight android library for outh2 based LinkedIn Sign In 
 
 
 Prerequisite:
@@ -23,7 +24,7 @@ Add it in your root build.gradle at the end of repositories:
   Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.azizur-rehman:LinkedInAuth:1.1'
+	        implementation 'com.github.azizur-rehman:LinkedInAuth:{LATEST_VERSION}'
 	}
   
   
