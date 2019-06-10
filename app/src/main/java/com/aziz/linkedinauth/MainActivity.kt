@@ -192,9 +192,8 @@ class MainActivity : AppCompatActivity() {
         doAsync {
 
             runOnUiThread {
-
-
                 pd.show()
+            }
 
                 val url = URL(authURL)
                 val connection = url.openConnection() as HttpsURLConnection
@@ -218,7 +217,8 @@ class MainActivity : AppCompatActivity() {
                 } while (true)
 
                 reader.close()
-                pd.dismiss()
+
+            runOnUiThread { pd.dismiss() }
 
                 if (response.contains("access_token")) {
                     val json = JSONObject(response)
@@ -229,7 +229,9 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("LinkedInWebView", "loadAuthURL: expires in = $expiresIn")
 
 
-                    pd.show()
+                    runOnUiThread {
+                        pd.show()
+                    }
                     Utils.linkedInClient.linkedInGetEmail(accessToken = "Bearer $accessToken")
                         .enqueue(object : Callback<ResponseBody> {
                             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -239,7 +241,8 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                pd.dismiss()
+                                runOnUiThread { pd.dismiss() }
+
                                 val body = response.body()?.string()
                                 Log.d("LinkedInWebView", "onResponse: email response = $body")
                                 try {
@@ -262,7 +265,7 @@ class MainActivity : AppCompatActivity() {
                                         .enqueue(object : Callback<ResponseBody> {
                                             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                                 Log.d("LinkedInWebView", "onFailure: detail error = ${t.message}")
-                                                pd.dismiss()
+                                                runOnUiThread { pd.dismiss() }
                                             }
 
                                             override fun onResponse(
@@ -270,7 +273,7 @@ class MainActivity : AppCompatActivity() {
                                                 response: Response<ResponseBody>
                                             ) {
                                                 val detailBody = response.body()?.string()
-                                                pd.dismiss()
+                                                runOnUiThread { pd.dismiss() }
 
                                                 val firstName = JSONObject(detailBody).getString("localizedFirstName")
                                                 val lastName = JSONObject(detailBody).getString("localizedLastName")
@@ -298,7 +301,7 @@ class MainActivity : AppCompatActivity() {
 
                                 } catch (e: Exception) {
                                     e.printStackTrace()
-                                    toast("Failed to fetch user data")
+                                    runOnUiThread { toast("Failed to fetch user data") }
                                     finish()
                                     Log.e("LinkedIN", "LinkedInWebView: onResponse = ${e.message}")
                                 }
@@ -306,7 +309,7 @@ class MainActivity : AppCompatActivity() {
                             }
 
                         })
-                }
+
             }
 
         }
