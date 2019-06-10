@@ -8,16 +8,16 @@ import com.aziz.linkedinauth.LinkedInIntent
 import com.aziz.linkedinauth.R
 import com.aziz.linkedinauth.Utils
 
-class SampleActivity : AppCompatActivity() {
+class SampleLibraryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
 
        val intent = LinkedInIntent.Builder(this)
-            .setAppKey("")
-            .setAppSecret("")
-           .setRedirectURL("")
+            .setAppKey("sdf")
+            .setAppSecret("sdfsdf")
+            .setRedirectURL("www.google.com")
             .build()
 
         startActivityForResult(intent,111)
@@ -26,7 +26,7 @@ class SampleActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        Log.d("SampleActivity", "onActivityResult: ${LinkedInIntent.UserDetail(data).data}")
+        Log.d("SampleLibraryActivity", "onActivityResult: ${LinkedInIntent.UserDetail(data)?.data}")
 
         super.onActivityResult(requestCode, resultCode, data)
     }

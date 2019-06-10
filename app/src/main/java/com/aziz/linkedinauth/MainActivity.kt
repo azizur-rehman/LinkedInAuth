@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
         //Show a progress filterDialog to the user
 
-        pd = Dialog(this, R.style.DialogSlideAnimStyle)
+        pd = Dialog(this, R.style.LibraryDialogSlideAnimStyle)
         with(pd){
             window?.requestFeature(Window.FEATURE_NO_TITLE)
             setContentView(R.layout.progress_bar_dialog)

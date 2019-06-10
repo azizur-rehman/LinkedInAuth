@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LibraryTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -11,7 +11,7 @@
         <item name="android:statusBarColor" tools:targetApi="lollipop">#0077B5</item>
     </style>
 
-    <style name="DialogSlideAnimStyle" parent="@style/ThemeOverlay.AppCompat.Dialog">
+    <style name="LibraryDialogSlideAnimStyle" parent="@style/ThemeOverlay.AppCompat.Dialog">
         <item name="android:windowBackground">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
