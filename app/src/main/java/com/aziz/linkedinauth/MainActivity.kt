@@ -191,43 +191,46 @@ class MainActivity : AppCompatActivity() {
 
         doAsync {
 
-            pd.show()
-
-            val url = URL(authURL)
-            val connection = url.openConnection() as HttpsURLConnection
+            runOnUiThread {
 
 
-            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-            var response = ""
-            var line : String?
+                pd.show()
 
-            do {
+                val url = URL(authURL)
+                val connection = url.openConnection() as HttpsURLConnection
 
-                line = reader.readLine()
-                response+=line
 
-                if (line == null)
+                val reader = BufferedReader(InputStreamReader(connection.inputStream))
+                var response = ""
+                var line: String?
 
-                    break
+                do {
 
-                println(line)
+                    line = reader.readLine()
+                    response += line
 
-            } while (true)
+                    if (line == null)
 
-            reader.close()
-            pd.dismiss()
+                        break
 
-            if(response.contains("access_token")){
-                val json = JSONObject(response)
-                val accessToken = json.getString("access_token")
-                val expiresIn = json.getLong("expires_in")
+                    println(line)
+
+                } while (true)
+
+                reader.close()
+                pd.dismiss()
+
+                if (response.contains("access_token")) {
+                    val json = JSONObject(response)
+                    val accessToken = json.getString("access_token")
+                    val expiresIn = json.getLong("expires_in")
 
 //                Log.d("LinkedInWebView", "loadAuthURL: access token = $accessToken")
 //                Log.d("LinkedInWebView", "loadAuthURL: expires in = $expiresIn")
 
 
-                pd.show()
-                Utils.linkedInClient.linkedInGetEmail(accessToken = "Bearer $accessToken")
+                    pd.show()
+                    Utils.linkedInClient.linkedInGetEmail(accessToken = "Bearer $accessToken")
                         .enqueue(object : Callback<ResponseBody> {
                             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                 Log.d("LinkedInWebView", "onFailure: email error = ${t.message}")
@@ -242,59 +245,68 @@ class MainActivity : AppCompatActivity() {
                                 try {
 
                                     val rootJSON = JSONObject(body)
-                                    val elementArray  = rootJSON.getJSONArray("elements")
+                                    val elementArray = rootJSON.getJSONArray("elements")
                                     val handleItem = JSONObject(elementArray[0].toString())
                                     val handleObject = handleItem.getString("handle~")
                                     val emailAddress = JSONObject(handleObject).getString("emailAddress")
 
 
                                     if (emailAddress.isEmpty()) {
-                                        Log.e("LinkedIn", "onResponse: User has either no email or has kept hidden from public")
+                                        Log.e(
+                                            "LinkedIn",
+                                            "onResponse: User has either no email or has kept hidden from public"
+                                        )
                                     }
 
-                                    Utils.linkedInClient.linkedInGetDetail("Bearer $accessToken").enqueue(object : Callback<ResponseBody>{
-                                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                            Log.d("LinkedInWebView", "onFailure: detail error = ${t.message}")
-                                            pd.dismiss()
-                                        }
+                                    Utils.linkedInClient.linkedInGetDetail("Bearer $accessToken")
+                                        .enqueue(object : Callback<ResponseBody> {
+                                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                                Log.d("LinkedInWebView", "onFailure: detail error = ${t.message}")
+                                                pd.dismiss()
+                                            }
 
-                                        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                            val detailBody = response.body()?.string()
-                                            pd.dismiss()
+                                            override fun onResponse(
+                                                call: Call<ResponseBody>,
+                                                response: Response<ResponseBody>
+                                            ) {
+                                                val detailBody = response.body()?.string()
+                                                pd.dismiss()
 
-                                            val firstName = JSONObject(detailBody).getString("localizedFirstName")
-                                            val lastName = JSONObject(detailBody).getString("localizedLastName")
-                                            val id = JSONObject(detailBody).getString("id")
+                                                val firstName = JSONObject(detailBody).getString("localizedFirstName")
+                                                val lastName = JSONObject(detailBody).getString("localizedLastName")
+                                                val id = JSONObject(detailBody).getString("id")
 
-                                            val responseObject = LinkedInResponse(detailBody, response.code(),
-                                                firstName, lastName, emailAddress, id,
-                                                accessToken)
+                                                val responseObject = LinkedInResponse(
+                                                    detailBody, response.code(),
+                                                    firstName, lastName, emailAddress, id,
+                                                    accessToken
+                                                )
 
-                                            val intent = intentFor<Any>("data" to responseObject)
+                                                val intent = intentFor<Any>("data" to responseObject)
 //                                            ("first" to firstName,
 //                                                "last" to lastName,
 //                                                "id" to id,
 //                                                "email" to emailAddress)
 
-                                            setResult(Activity.RESULT_OK, intent)
-                                            finish()
+                                                setResult(Activity.RESULT_OK, intent)
+                                                finish()
 
-                                            Log.d("LinkedInWebView", "onResponse: detail = $detailBody")
-                                        }
+                                                Log.d("LinkedInWebView", "onResponse: detail = $detailBody")
+                                            }
 
-                                    })
+                                        })
 
-                                }
-                                catch (e:Exception){
+                                } catch (e: Exception) {
                                     e.printStackTrace()
                                     toast("Failed to fetch user data")
                                     finish()
-                                    Log.e("LinkedIN", "LinkedInWebView: onResponse = ${e.message}" )
+                                    Log.e("LinkedIN", "LinkedInWebView: onResponse = ${e.message}")
                                 }
 
                             }
 
                         })
+                }
             }
 
         }
